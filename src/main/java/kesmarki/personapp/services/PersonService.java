@@ -1,5 +1,8 @@
 package kesmarki.personapp.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +33,23 @@ public class PersonService {
 	public PersonDTO getPersonById(Long id) {
 		Person person = personRepository.getPersonById(id);
 		return personDtoMapper.toPersonDTO(person);
+	}
+	public List<PersonDTO> getPersonByName (String lastName, String firstName){
+		List<Person> personList = personRepository.findByLastNameAndFirstName(lastName, firstName);
+		List<PersonDTO> dtoList = new ArrayList<>();
+		for(Person p : personList) {
+			dtoList.add(personDtoMapper.toPersonDTO(p));
+		}
+		return dtoList;
+	}
+
+	public List<PersonDTO> getPersonByCity(String city) {
+		List<Person> personList = personRepository.findByCity(city);
+		List<PersonDTO> dtoList = new ArrayList<>();
+		for(Person p : personList) {
+			dtoList.add(personDtoMapper.toPersonDTO(p));
+		}
+		return dtoList;
 	}
 
 }

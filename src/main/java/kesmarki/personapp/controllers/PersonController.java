@@ -1,5 +1,7 @@
 package kesmarki.personapp.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +38,15 @@ public class PersonController {
 
 		return new ResponseEntity<PersonDTO>(personService.getPersonById(id), HttpStatus.OK);
 
+	}
+	
+	@GetMapping("/getPerson/{lastName}/{firstName}")
+	public ResponseEntity<List<PersonDTO>> getPerson (@PathVariable("lastName") String lastName, @PathVariable("firstName") String firstName){
+		return new ResponseEntity<List<PersonDTO>>(personService.getPersonByName(lastName, firstName), HttpStatus.OK);
+	}
+	
+	@GetMapping("/getPeopleFromCity/{city}")
+	public ResponseEntity<List<PersonDTO>> getPeopleFromCity(@PathVariable String city){
+		return new ResponseEntity<List<PersonDTO>>(personService.getPersonByCity(city), HttpStatus.OK);
 	}
 }
