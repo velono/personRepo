@@ -1,15 +1,16 @@
 package kesmarki.personapp.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class PersonDTO {
 
 	Long id;
 
-	@NotNull(message = "Lastname can't be null.")
+	@NotBlank(message = "Lastname can't be null.")
 	String lastName;
 
-	@NotNull(message = "Firstname can't be null.")
+	@NotBlank(message = "Firstname can't be null.")
 	String firstName;
 
 	Long contactId;

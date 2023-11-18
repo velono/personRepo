@@ -8,6 +8,7 @@ import kesmarki.personapp.entities.Person;
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Long> {
 	
+	public Person findByLastNameAndFirstName(String lastName, String firstName);
 	public Person getPersonById(Long id);
 
 }
