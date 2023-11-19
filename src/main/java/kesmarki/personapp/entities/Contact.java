@@ -17,15 +17,15 @@ public class Contact {
 	@Id
 	@SequenceGenerator(name = "contact-seq-gen", initialValue = 6, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contact-seq-gen")
-	Long id;
+	private Long id;
 
-	String email;
+	private String email;
 
-	String tel;
+	private String tel;
 
 	@OneToOne(mappedBy = "contact")
 	@JsonManagedReference("cont_person")
-	Person person;
+	private Person person;
 
 	public Contact() {
 	}

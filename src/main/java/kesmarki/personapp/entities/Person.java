@@ -24,25 +24,25 @@ public class Person {
 	// @GeneratedValue(strategy = GenerationType.TABLE)
 	@SequenceGenerator(name = "person-seq-gen", initialValue = 6, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "person-seq-gen")
-	Long id;
+	private Long id;
 
 	@Column(name = "lastname")
-	String lastName;
+	private String lastName;
 
 	@Column(name = "firstname")
-	String firstName;
+	private String firstName;
 
 	@Column(name = "contactid")
-	Long contactId;
+	private Long contactId;
 
 	@OneToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id", insertable = false, updatable = false) // Changed from "contactid" to "id".
 	@JsonBackReference("cont_person")
-	Contact contact;
+	private Contact contact;
 
 	@OneToMany(mappedBy = "person", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	@JsonManagedReference("person_addr")
-	List<Address> addresses;
+	private List<Address> addresses;
 
 	public Person() {
 	}
