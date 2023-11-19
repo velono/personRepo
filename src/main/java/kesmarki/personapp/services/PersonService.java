@@ -71,10 +71,10 @@ public class PersonService {
 
 	// Update person
 	public String updatePerson(@Valid PersonDTO personDTO) throws WrongInputException {
+		Person person = personRepository.findById(personDTO.getId()).orElseThrow();
 		if (personDTO.getFirstName() == null || personDTO.getLastName() == null) {
 			throw new WrongInputException("Name fields can't be null;");
 		}
-		Person person = personRepository.findById(personDTO.getId()).orElse(null);
 		person.setFirstName(personDTO.getFirstName());
 		person.setLastName(personDTO.getLastName());
 		person.setContactId(personDTO.getContactId());

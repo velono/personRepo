@@ -69,7 +69,7 @@ public class PersonController {
 	public ResponseEntity<String> updatePerson(@Valid @RequestBody PersonDTO personDTO) {
 		try {
 			return new ResponseEntity<String>(personService.updatePerson(personDTO), HttpStatus.OK);
-		} catch (WrongInputException e) {
+		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}

@@ -2,10 +2,13 @@ package kesmarki.personapp.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,11 +35,12 @@ public class Person {
 	@Column(name = "contactid")
 	Long contactId;
 
-	@OneToOne // (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "id", insertable = false, updatable = false)
+	@OneToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "id", insertable = false, updatable = false) // Changed from "contactid" to "id".
+	@JsonBackReference("cont_person")
 	Contact contact;
 
-	@OneToMany(mappedBy = "person")
+	@OneToMany(mappedBy = "person", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	@JsonManagedReference("person_addr")
 	List<Address> addresses;
 
