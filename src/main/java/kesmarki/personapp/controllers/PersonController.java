@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -39,14 +40,29 @@ public class PersonController {
 		return new ResponseEntity<PersonDTO>(personService.getPersonById(id), HttpStatus.OK);
 
 	}
-	
+
 	@GetMapping("/getPerson/{lastName}/{firstName}")
-	public ResponseEntity<List<PersonDTO>> getPerson (@PathVariable("lastName") String lastName, @PathVariable("firstName") String firstName){
+	public ResponseEntity<List<PersonDTO>> getPerson(@PathVariable("lastName") String lastName,
+			@PathVariable("firstName") String firstName) {
 		return new ResponseEntity<List<PersonDTO>>(personService.getPersonByName(lastName, firstName), HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getPeopleFromCity/{city}")
-	public ResponseEntity<List<PersonDTO>> getPeopleFromCity(@PathVariable String city){
+	public ResponseEntity<List<PersonDTO>> getPeopleFromCity(@PathVariable String city) {
 		return new ResponseEntity<List<PersonDTO>>(personService.getPersonByCity(city), HttpStatus.OK);
+	}
+
+	@GetMapping("/getEverybody")
+	public ResponseEntity<List<PersonDTO>> getEverybody() {
+		return new ResponseEntity<List<PersonDTO>>(personService.getEverybody(), HttpStatus.OK);
+	}
+
+	@PutMapping("/updateperson")
+	public ResponseEntity<String> updatePerson(@Valid @RequestBody PersonDTO personDTO) {
+		try {
+			return new ResponseEntity<String>(personService.updatePerson(personDTO), HttpStatus.OK);
+		} catch (WrongInputException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
 	}
 }

@@ -21,5 +21,5 @@ CREATE TABLE IF NOT EXISTS person (
 	id SERIAL PRIMARY KEY, 
 	lastname varchar(255) NOT NULL,
 	firstname varchar(255) NOT NULL,
-	contactid int REFERENCES contact
+	contactid int
 );

@@ -3,6 +3,7 @@ package kesmarki.personapp.dto;
 import kesmarki.personapp.entities.Person;
 
 public class PersonDtoMapper {
+
 	public Person toPerson(PersonDTO personDTO) {
 		Person person = new Person();
 		person.setFirstName(personDTO.getFirstName());

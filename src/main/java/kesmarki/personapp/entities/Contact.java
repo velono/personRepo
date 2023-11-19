@@ -1,5 +1,7 @@
 package kesmarki.personapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,6 +24,7 @@ public class Contact {
 	String tel;
 
 	@OneToOne(mappedBy = "contact")
+	@JsonManagedReference("cont_person")
 	Person person;
 
 	public Contact() {
@@ -70,5 +73,4 @@ public class Contact {
 	public String toString() {
 		return "Contact [id=" + id + ", email=" + email + ", tel=" + tel + "]";
 	}
-
 }

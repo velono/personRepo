@@ -33,7 +33,7 @@ public class Person {
 	Long contactId;
 
 	@OneToOne // (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "contactid", insertable = false, updatable = false)
+	@JoinColumn(name = "id", insertable = false, updatable = false)
 	Contact contact;
 
 	@OneToMany(mappedBy = "person")
