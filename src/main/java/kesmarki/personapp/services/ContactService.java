@@ -38,9 +38,9 @@ public class ContactService {
 
 	// Retrieve
 	public List<ContactDTO> getAllContacts() {
-		List<Contact> personList = contactRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+		List<Contact> contactList = contactRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
 		List<ContactDTO> dtoList = new ArrayList<>();
-		for (Contact c : personList) {
+		for (Contact c : contactList) {
 			dtoList.add(contactDtoMapper.toDTO(c));
 		}
 		return dtoList;

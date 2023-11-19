@@ -16,39 +16,39 @@ import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import kesmarki.personapp.dto.ContactDTO;
+import kesmarki.personapp.dto.AddressDTO;
 import kesmarki.personapp.exceptions.WrongInputException;
-import kesmarki.personapp.services.ContactService;
+import kesmarki.personapp.services.AddressService;
 
 @RestController
-public class ContactController {
+public class AddressController {
 
 	@Autowired
-	ContactService contactService;
+	AddressService addressService;
 
 	// Add
-	@PostMapping("/addContact")
-	public ResponseEntity<String> addContactDetails(@Valid @RequestBody ContactDTO contactDTO) {
+	@PostMapping("/addAddress")
+	public ResponseEntity<String> addAddressDetails(@Valid @RequestBody AddressDTO addressDTO) {
 		try {
-			return new ResponseEntity<String>(contactService.addContact(contactDTO), HttpStatus.OK);
+			return new ResponseEntity<String>(addressService.addAddress(addressDTO), HttpStatus.OK);
 		} catch (WrongInputException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	// Read
-	@GetMapping("/getAllContacts")
-	public ResponseEntity<List<ContactDTO>> getAllContacts() {
-		return new ResponseEntity<List<ContactDTO>>(contactService.getAllContacts(), HttpStatus.OK);
+	@GetMapping("/getAllAddresses")
+	public ResponseEntity<List<AddressDTO>> getAllAddresss() {
+		return new ResponseEntity<List<AddressDTO>>(addressService.getAllAddress(), HttpStatus.OK);
 	}
 
 	// Update
 
 	@Transactional
-	@PutMapping("/updateContact")
-	public ResponseEntity<String> updateContact(@Valid @RequestBody ContactDTO contactDTO) {
+	@PutMapping("/updateAddress")
+	public ResponseEntity<String> updateAddress(@Valid @RequestBody AddressDTO addressDTO) {
 		try {
-			return new ResponseEntity<String>(contactService.updateContact(contactDTO), HttpStatus.OK);
+			return new ResponseEntity<String>(addressService.updateAddress(addressDTO), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
@@ -56,11 +56,11 @@ public class ContactController {
 
 	// Delete
 	@Transactional
-	@DeleteMapping("/deleteContact/{id}")
-	public ResponseEntity<String> deleteContactById(@PathVariable Long id) {
+	@DeleteMapping("/deleteAddress/{id}")
+	public ResponseEntity<String> deletePersonById(@PathVariable Long id) {
 		try {
-			contactService.deleteContactById(id);
-			return new ResponseEntity<String>("Contact " + id + " deleted.", HttpStatus.OK);
+			addressService.deleteAddressById(id);
+			return new ResponseEntity<String>("Address " + id + " deleted.", HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
