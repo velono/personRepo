@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import kesmarki.personapp.dto.PersonDTO;
 import kesmarki.personapp.exceptions.WrongInputException;
@@ -30,15 +32,16 @@ public class PersonController {
 			return new ResponseEntity<String>(personService.addPerson(personDTO), HttpStatus.OK);
 		} catch (WrongInputException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-
 		}
 	}
 
 	@GetMapping("/getPerson/{id}")
 	public ResponseEntity<PersonDTO> getPerson(@PathVariable("id") Long id) {
-
-		return new ResponseEntity<PersonDTO>(personService.getPersonById(id), HttpStatus.OK);
-
+		try {
+			return new ResponseEntity<PersonDTO>(personService.getPersonById(id), HttpStatus.OK);
+		} catch (WrongInputException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
 	}
 
 	@GetMapping("/getPerson/{lastName}/{firstName}")
@@ -49,7 +52,11 @@ public class PersonController {
 
 	@GetMapping("/getPeopleFromCity/{city}")
 	public ResponseEntity<List<PersonDTO>> getPeopleFromCity(@PathVariable String city) {
-		return new ResponseEntity<List<PersonDTO>>(personService.getPersonByCity(city), HttpStatus.OK);
+		try {
+			return new ResponseEntity<List<PersonDTO>>(personService.getPersonByCity(city), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
 	}
 
 	@GetMapping("/getEverybody")
@@ -57,11 +64,23 @@ public class PersonController {
 		return new ResponseEntity<List<PersonDTO>>(personService.getEverybody(), HttpStatus.OK);
 	}
 
+	@Transactional
 	@PutMapping("/updateperson")
 	public ResponseEntity<String> updatePerson(@Valid @RequestBody PersonDTO personDTO) {
 		try {
 			return new ResponseEntity<String>(personService.updatePerson(personDTO), HttpStatus.OK);
 		} catch (WrongInputException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@Transactional
+	@DeleteMapping("/deletePerson/{id}")
+	public ResponseEntity<String> deletePersonById(@PathVariable Long id) {
+		try {
+			personService.deletePersonById(id);
+			return new ResponseEntity<String>("Person " + id + " deleted.", HttpStatus.OK);
+		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}

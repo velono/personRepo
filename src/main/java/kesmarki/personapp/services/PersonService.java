@@ -31,8 +31,11 @@ public class PersonService {
 	}
 
 	// Retrieve person
-	public PersonDTO getPersonById(Long id) {
-		Person person = personRepository.getPersonById(id);
+	public PersonDTO getPersonById(Long id) throws WrongInputException {
+		Person person = personRepository.findById(id).orElse(null);
+		if (person == null) {
+			throw new WrongInputException("Id does not exist.");
+		}
 		return personDtoMapper.toPersonDTO(person);
 	}
 
@@ -45,8 +48,11 @@ public class PersonService {
 		return dtoList;
 	}
 
-	public List<PersonDTO> getPersonByCity(String city) {
+	public List<PersonDTO> getPersonByCity(String city) throws WrongInputException {
 		List<Person> personList = personRepository.findByCity(city);
+		if (personList.size() == 0) {
+			throw new WrongInputException("No such city.");
+		}
 		List<PersonDTO> dtoList = new ArrayList<>();
 		for (Person p : personList) {
 			dtoList.add(personDtoMapper.toPersonDTO(p));
@@ -56,7 +62,6 @@ public class PersonService {
 
 	public List<PersonDTO> getEverybody() {
 		List<Person> personList = personRepository.findAll();
-		System.out.println("ENNYIEN VANNAK: " + personList.size());
 		List<PersonDTO> dtoList = new ArrayList<>();
 		for (Person p : personList) {
 			dtoList.add(personDtoMapper.toPersonDTO(p));
@@ -73,11 +78,12 @@ public class PersonService {
 		person.setFirstName(personDTO.getFirstName());
 		person.setLastName(personDTO.getLastName());
 		person.setContactId(personDTO.getContactId());
-		Person p = personRepository.save(person);
-		return "Person updated. " + p.getId();
+		return "Person updated. " + person.getId();
 	}
 
 	// Delete person
-
-	//
+		public void deletePersonById(Long id) {
+			personRepository.findById(id).orElseThrow();
+			personRepository.deleteById(id);
+		}
 }
