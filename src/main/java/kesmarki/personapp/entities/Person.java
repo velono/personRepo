@@ -21,7 +21,7 @@ import jakarta.persistence.SequenceGenerator;
 public class Person {
 
 	@Id
-	// @GeneratedValue(strategy = GenerationType.TABLE)
+
 	@SequenceGenerator(name = "person-seq-gen", initialValue = 6, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "person-seq-gen")
 	private Long id;
@@ -36,7 +36,7 @@ public class Person {
 	private Long contactId;
 
 	@OneToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "id", insertable = false, updatable = false) // Changed from "contactid" to "id".
+	@JoinColumn(name = "contactid", insertable = false, updatable = false) // Changed from "contactid" to "id".
 	@JsonBackReference("cont_person")
 	private Contact contact;
 
