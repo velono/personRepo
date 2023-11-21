@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -20,29 +21,57 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import kesmarki.personapp.dto.PersonDTO;
+import kesmarki.personapp.dto.PersonDtoMapper;
+import kesmarki.personapp.entities.Person;
 import kesmarki.personapp.exceptions.WrongInputException;
+import kesmarki.personapp.repository.PersonRepository;
 import kesmarki.personapp.services.PersonService;
 
 @ExtendWith(MockitoExtension.class)
 class PersonControllerTest {
 
-		@Mock
-		private PersonService personService;
 
-		@InjectMocks
-		private PersonController personController;
+	@Mock
+	private PersonService personService;
+	
+	@Mock
+	private PersonRepository personRepository;
 
-		@Test
-		void testGetEveryBody() {
-			// Mocking data
-			List<PersonDTO> mockPersons = Arrays.asList(
-					new PersonDTO(1L, "Smith", "Adam", 1L),
-					new PersonDTO(2L, "Eckhart", "Aaron", 2L), 
-					new PersonDTO(3L, "Pierce", "Maggie", 3L)
-			);
+	@InjectMocks
+	private PersonController personController;
+	
+	@InjectMocks
+	PersonDtoMapper personDtoMapper;
+	
+	private List<PersonDTO> mockPersonsDTO = Arrays.asList(
+			new PersonDTO(1L, "Smith", "Adam", 1L),
+			new PersonDTO(2L, "Eckhart", "Aaron", 2L), 
+			new PersonDTO(3L, "Pierce", "Maggie", 3L)
+	);
+	
+	private List<Person> mockPersons = Arrays.asList(
+			new Person(1L, "Smith", "Adam", 1L),
+			new Person(2L, "Eckhart", "Aaron", 2L), 
+			new Person(3L, "Pierce", "Maggie", 3L)
+	);
 
+	@Test
+	void testPersonToDtoMapper() {
+		List<PersonDTO> actual = new ArrayList<>();
+		mockPersons.forEach((p)-> actual.add(personDtoMapper.toPersonDTO(p)));
+		assertEquals(mockPersonsDTO.size(), actual.size());
+		for(int i = 0; i < mockPersonsDTO.size(); i++) {
+			assertEquals(mockPersonsDTO.get(i).getId(), actual.get(i).getId());
+			assertEquals(mockPersonsDTO.get(i).getContactId(), actual.get(i).getContactId());
+			assertEquals(mockPersonsDTO.get(i).getLastName(), actual.get(i).getLastName());
+			assertEquals(mockPersonsDTO.get(i).getFirstName(), actual.get(i).getFirstName());
+		}
+	}
+	
+	@Test
+	void testGetEveryBody() {
 			// Mocking service behavior
-			Mockito.when(personService.getEverybody()).thenReturn(mockPersons);
+			Mockito.when(personService.getEverybody()).thenReturn(mockPersonsDTO);
 
 			// Calling the controller method
 			ResponseEntity<List<PersonDTO>> responseEntity = personController.getEverybody();
